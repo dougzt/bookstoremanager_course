@@ -98,6 +98,8 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
+				<sonar.projectKey>dougzt_bookstoremanager_course</sonar.projectKey>
+				<sonar.organization>bookstoremanager</sonar.organization>
 				<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 				<sonar.exclusions>
 					src/main/java/**/BookstoremanagerApplication.java,

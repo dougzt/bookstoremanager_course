@@ -5,10 +5,11 @@ jdk: openjdk14
 install: true
 addons:
   sonarcloud:
-    organization: $SONAR_ORGANIZATION
-    token: $SONAR_TOKEN
+    organization: "bookstoremanager"
 script:
   - mvn clean package sonar:sonar -P sonar
+  # Put before sonar-scanner your other script steps
+  - sonar-scanner -Dsonar.verbose=true -X
 cache:
   directories:
     - $HOME/.m2
