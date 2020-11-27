@@ -63,6 +63,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.jacoco</groupId>
+			<artifactId>jacoco-maven-plugin</artifactId>
+			<version>0.8.6</version>
+			<type>maven-plugin</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -81,5 +87,71 @@
             </plugin>
         </plugins>
 	</build>
+
+	<!--
+   Maven Sonar Profile for code coverage analysis in SonarQube
+-->
+	<profiles>
+		<profile>
+			<id>sonar</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<sonar.projectKey>dougzt_bookstoremanager_course</sonar.projectKey>
+				<sonar.organization>bookstoremanager</sonar.organization>
+				<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+				<sonar.exclusions>
+					src/main/java/**/BookstoremanagerApplication.java,
+					src/main/java/**/config/**,
+					src/main/java/**/exception/**,
+					src/main/java/**/dto/**,
+					src/main/java/**/entity/**,
+					src/main/java/**/repository/**,
+					src/test/java/**
+				</sonar.exclusions>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.8.6</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>report</id>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>jacoco-check</id>
+								<goals>
+									<goal>check</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<rule>
+											<limits>
+												<limit>
+													<minimum>0.1</minimum>
+												</limit>
+											</limits>
+										</rule>
+									</rules>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
