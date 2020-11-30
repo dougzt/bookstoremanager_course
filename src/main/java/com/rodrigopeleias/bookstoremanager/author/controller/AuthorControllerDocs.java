@@ -12,6 +12,8 @@ import java.util.List;
 @Api("Authors management")
 public interface AuthorControllerDocs {
 
+    /*Swagger Documentation */
+
     @ApiOperation(value = "Author creation operation")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Success author creation"),
