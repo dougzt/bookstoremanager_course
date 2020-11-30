@@ -20,6 +20,7 @@ import java.util.Collections;
 
 import static com.rodrigopeleias.bookstoremanager.utils.JsonConversionUtils.asJsonString;
 import static org.hamcrest.core.Is.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -51,7 +52,7 @@ public class AuthorControllerTest {
     void whenPOSTIsCalledThenStatusCreatedShouldBeReturned() throws Exception {
         AuthorDTO expectedCreatedAuthorDTO = authorDTOBuilder.buildAuthorDTO();
 
-        Mockito.when(authorService.create(expectedCreatedAuthorDTO)).thenReturn(expectedCreatedAuthorDTO);
+        when(authorService.create(expectedCreatedAuthorDTO)).thenReturn(expectedCreatedAuthorDTO);
 
         mockMvc.perform(post(AUTHORS_API_URL_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -77,7 +78,7 @@ public class AuthorControllerTest {
     void whenGETWithValidIdIsCalledThenStatusOKShouldBeReturned() throws Exception {
         AuthorDTO expectedFoundAuthorDTO = authorDTOBuilder.buildAuthorDTO();
 
-        Mockito.when(authorService.findById(expectedFoundAuthorDTO.getId())).thenReturn(expectedFoundAuthorDTO);
+        when(authorService.findById(expectedFoundAuthorDTO.getId())).thenReturn(expectedFoundAuthorDTO);
 
         mockMvc.perform(get(AUTHORS_API_URL_PATH + "/" + expectedFoundAuthorDTO.getId())
                 .contentType(MediaType.APPLICATION_JSON))
@@ -92,7 +93,7 @@ public class AuthorControllerTest {
     void whenGETListIsCalledThenStatusOKShouldBeReturned() throws Exception {
         AuthorDTO expectedFoundAuthorDTO = authorDTOBuilder.buildAuthorDTO();
 
-        Mockito.when(authorService.findAll()).thenReturn(Collections.singletonList(expectedFoundAuthorDTO));
+        when(authorService.findAll()).thenReturn(Collections.singletonList(expectedFoundAuthorDTO));
 
         mockMvc.perform(get(AUTHORS_API_URL_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -100,5 +101,17 @@ public class AuthorControllerTest {
                 .andExpect(jsonPath("$[0].id", is(expectedFoundAuthorDTO.getId().intValue())))
                 .andExpect(jsonPath("$[0].name", is(expectedFoundAuthorDTO.getName())))
                 .andExpect(jsonPath("$[0].age", is(expectedFoundAuthorDTO.getAge())));
+    }
+
+    @Test
+    void whenDELETEWithValidIdIsCalledThenNoContentShouldBeReturned() throws Exception {
+        AuthorDTO expectedAuthorDeletedDTO = authorDTOBuilder.buildAuthorDTO();
+        var expectedAuthorDeletedId = expectedAuthorDeletedDTO.getId();
+
+        doNothing().when(authorService).delete(expectedAuthorDeletedId);
+
+        mockMvc.perform(delete(AUTHORS_API_URL_PATH + "/" + expectedAuthorDeletedId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 }
