@@ -9,7 +9,9 @@ import com.rodrigopeleias.bookstoremanager.publishers.repository.PublisherReposi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PublisherService {
@@ -35,6 +37,13 @@ public class PublisherService {
         return publisherRepository.findById(id)
                 .map(publisherMappeer::toDTO)
                 .orElseThrow(() -> new PublisherNotFoundException(id));
+    }
+
+    public List<PublisherDTO> findAll() {
+        return publisherRepository.findAll()
+                .stream()
+                .map(publisherMappeer::toDTO)
+                .collect(Collectors.toList());
     }
 
     private void verifyIfExists(String name, String code) {
