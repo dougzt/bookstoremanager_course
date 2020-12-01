@@ -103,4 +103,16 @@ public class PublisherControllerTest {
                 .andExpect(jsonPath("$[0].name", is(expectedFoundPublisherDTO.getName())))
                 .andExpect(jsonPath("$[0].code", is(expectedFoundPublisherDTO.getCode())));
     }
+
+    @Test
+    void whenDELETEIsCalledThenNoContentStatusShouldBeInformed() throws Exception {
+        PublisherDTO expectedPublisherToDeleteDTO = publisherDTOBuilder.buildPublisherDTO();
+        var expectedPublisherIdToDelete = expectedPublisherToDeleteDTO.getId();
+
+        doNothing().when(publisherService).delete(expectedPublisherIdToDelete);
+
+        mockMvc.perform(delete(PUBLISHERS_API_URL_PATH + "/" + expectedPublisherIdToDelete)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
 }
