@@ -3,6 +3,7 @@ package com.rodrigopeleias.bookstoremanager.publishers.service;
 import com.rodrigopeleias.bookstoremanager.publishers.dto.PublisherDTO;
 import com.rodrigopeleias.bookstoremanager.publishers.entity.Publisher;
 import com.rodrigopeleias.bookstoremanager.publishers.exception.PublisherAlreadyExistsException;
+import com.rodrigopeleias.bookstoremanager.publishers.exception.PublisherNotFoundException;
 import com.rodrigopeleias.bookstoremanager.publishers.mapper.PublisherMapper;
 import com.rodrigopeleias.bookstoremanager.publishers.repository.PublisherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,12 @@ public class PublisherService {
         Publisher publisherToCreate = publisherMappeer.toModel(publisherDTO);
         Publisher createdPublisher = publisherRepository.save(publisherToCreate);
         return  publisherMappeer.toDTO(createdPublisher);
+    }
+
+    public PublisherDTO findById(Long id) {
+        return publisherRepository.findById(id)
+                .map(publisherMappeer::toDTO)
+                .orElseThrow(() -> new PublisherNotFoundException(id));
     }
 
     private void verifyIfExists(String name, String code) {

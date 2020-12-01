@@ -1,6 +1,7 @@
 package com.rodrigopeleias.bookstoremanager.publishers.controller;
 
 import com.rodrigopeleias.bookstoremanager.publishers.dto.PublisherDTO;
+import com.rodrigopeleias.bookstoremanager.publishers.entity.Publisher;
 import com.rodrigopeleias.bookstoremanager.publishers.service.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,5 +24,10 @@ public class PublisherController implements PublisherControllerDocs {
     @ResponseStatus(HttpStatus.CREATED)
     public PublisherDTO create(@RequestBody @Valid PublisherDTO publisherDTO) {
         return publisherService.create(publisherDTO);
+    }
+
+    @GetMapping("/{id}")
+    public PublisherDTO findById(@PathVariable Long id) {
+        return publisherService.findById(id);
     }
 }
