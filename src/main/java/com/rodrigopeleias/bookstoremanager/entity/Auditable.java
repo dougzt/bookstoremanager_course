@@ -1,5 +1,6 @@
 package com.rodrigopeleias.bookstoremanager.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
