@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Api("system users management")
 public interface UserControllerDocs {
@@ -16,4 +17,11 @@ public interface UserControllerDocs {
             @ApiResponse(code = 400, message = "Missing required field, or an error on validation build rules")
     })
     MessageDTO create(UserDTO userDTO);
+
+    @ApiOperation(value = "User exclusion operation")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Success user exclusion"),
+            @ApiResponse(code = 404, message = "User with informed id not found in the system")
+    })
+    void delete(Long id);
 }
