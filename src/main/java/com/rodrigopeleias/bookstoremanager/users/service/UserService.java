@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.rodrigopeleias.bookstoremanager.users.utils.MessageDTOUtils.creationMessage;
+import static com.rodrigopeleias.bookstoremanager.users.utils.MessageDTOUtils.updateMessage;
+
 @Service
 public class UserService {
 
@@ -33,12 +36,23 @@ public class UserService {
     }
 
     public void delete(Long id) {
-        verifyIfExists(id);
+        verifyAndGetIfExists(id);
         userRepository.deleteById(id);
     }
 
-    private void verifyIfExists(Long id) {
-        userRepository.findById(id)
+    public MessageDTO update(Long id, UserDTO userToUpdateDTO) {
+        User foundUser = verifyAndGetIfExists(id);
+
+        userToUpdateDTO.setId(foundUser.getId());
+        User userToUpdate = userMapper.toModel(userToUpdateDTO);
+        userToUpdate.setCreatedDate(foundUser.getCreatedDate());
+
+        User updatedUser = userRepository.save(userToUpdate);
+        return updateMessage(updatedUser);
+    }
+
+    private User verifyAndGetIfExists(Long id) {
+        return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
@@ -47,14 +61,5 @@ public class UserService {
         if (foundUser.isPresent()) {
             throw new UserAlreadyExistsException(email, username);
         }
-    }
-
-    private MessageDTO creationMessage(User createdUser) {
-        String username = createdUser.getUsername();
-        Long userID = createdUser.getId();
-        String createdUserMessage = String.format("User %s with ID %s successfully created", username, userID);
-        return MessageDTO.builder()
-                .message(createdUserMessage)
-                .build();
     }
 }
