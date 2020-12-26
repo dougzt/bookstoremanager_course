@@ -1,5 +1,7 @@
 package com.rodrigopeleias.bookstoremanager.users.controller;
 
+import com.rodrigopeleias.bookstoremanager.users.dto.JwtRequest;
+import com.rodrigopeleias.bookstoremanager.users.dto.JwtResponse;
 import com.rodrigopeleias.bookstoremanager.users.dto.MessageDTO;
 import com.rodrigopeleias.bookstoremanager.users.dto.UserDTO;
 import io.swagger.annotations.Api;
@@ -34,4 +36,11 @@ public interface UserControllerDocs {
             @ApiResponse(code = 400, message = "Missing required field, or an error on validation build rules")
     })
     MessageDTO update(@PathVariable Long id, @RequestBody @Valid UserDTO userToUpdateDTO);
+
+    @ApiOperation(value = "User authentication operation")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success user authenticated"),
+            @ApiResponse(code = 404, message = "User not found")
+    })
+    JwtResponse createAuthenticationToken(@RequestBody @Valid JwtRequest jwtRequest);
 }
